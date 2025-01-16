@@ -1,6 +1,7 @@
 // import Logo from "@/components/logo";
 // import { Button } from "@/components/ui/button";
 import Logo from '@/components/logo'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -31,6 +32,7 @@ export default function HomePage() {
           <Button asChild variant="secondary"> */}
 					<Link href="/login">Log in</Link>
 					{/* </Button> */}
+					<Button>dwa</Button>
 				</div>
 			</div>
 		</main>
