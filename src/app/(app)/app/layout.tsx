@@ -6,7 +6,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<>
 			<BackgroundPattern />
-			<div className="max-w-[1050px] mx-auto px-4">
+			<div className="max-w-[1050px] mx-auto px-4 min-h-screen flex flex-col">
 				<AppHeader />
 				{children}
 				<AppFooter />
