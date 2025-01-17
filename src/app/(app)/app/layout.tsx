@@ -1,16 +1,16 @@
-import AppFooter from '@/components/app-footer'
-import AppHeader from '@/components/app-header'
-import BackgroundPattern from '@/components/background-pattern'
+import AppFooter from "@/components/app-footer"
+import AppHeader from "@/components/app-header"
+import BackgroundPattern from "@/components/background-pattern"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-	return (
-		<>
-			<BackgroundPattern />
-			<div className="max-w-[1050px] mx-auto px-4 min-h-screen flex flex-col">
-				<AppHeader />
-				{children}
-				<AppFooter />
-			</div>
-		</>
-	)
+  return (
+    <>
+      <BackgroundPattern />
+      <div className="mx-auto flex min-h-screen max-w-[1050px] flex-col px-4">
+        <AppHeader />
+        {children}
+        <AppFooter />
+      </div>
+    </>
+  )
 }
