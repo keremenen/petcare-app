@@ -1,5 +1,5 @@
 import Branding from '@/components/branding'
-import H1 from '@/components/h1'
+
 import Stats from '@/components/stats'
 
 export default function DashboardPage() {
