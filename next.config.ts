@@ -1,16 +1,16 @@
-import type { NextConfig } from 'next'
-import { hostname } from 'os'
+import type { NextConfig } from "next"
+import { hostname } from "os"
 
 const nextConfig: NextConfig = {
-	/* config options here */
-	images: {
-		remotePatterns: [
-			{
-				protocol: 'https',
-				hostname: 'bytegrad.com',
-			},
-		],
-	},
+  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "bytegrad.com",
+      },
+    ],
+  },
 }
 
 export default nextConfig
