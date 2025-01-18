@@ -1,14 +1,15 @@
 "use client"
 import { createContext, useState } from "react"
 
-const PetContext = createContext(null)
+export const PetContext = createContext(null)
 
 export default function PetContextProvider({
+  data,
   children,
 }: {
   children: React.ReactNode
 }) {
-  const [pets, setPets] = useState([])
+  const [pets, setPets] = useState(data)
   const [selectedPet, setSelectedPet] = useState(null)
 
   return (
@@ -17,7 +18,7 @@ export default function PetContextProvider({
         pets,
         setPets,
         selectedPet,
-        setSelected,
+        setSelectedPet,
       }}
     >
       {children}
