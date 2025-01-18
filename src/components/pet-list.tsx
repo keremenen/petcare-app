@@ -1,7 +1,8 @@
+"use client"
 import { usePetContext } from "@/lib/hooks"
 import Image from "next/image"
 
-export default async function PetList() {
+export default function PetList() {
   const { pets } = usePetContext()
 
   return (
