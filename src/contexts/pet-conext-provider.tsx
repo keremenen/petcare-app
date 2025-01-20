@@ -6,6 +6,7 @@ type TPetContext = {
   pets: Pet[]
   selectedPetId: string | null
   selectedPet: Pet | undefined
+  numberOfPets: number
   handleSetSelectedPetId: (id: string) => void
 }
 
@@ -26,6 +27,7 @@ export default function PetContextProvider({
 
   // derived state
   const selectedPet = pets.find((pet) => pet.id === selectedPetId)
+  const numberOfPets = pets.length
 
   // handlers
   const handleSetSelectedPetId = (id: string) => {
@@ -38,6 +40,7 @@ export default function PetContextProvider({
         pets,
         selectedPetId,
         selectedPet,
+        numberOfPets,
         handleSetSelectedPetId,
       }}
     >
