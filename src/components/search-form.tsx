@@ -11,7 +11,7 @@ export default function SearchForm() {
         placeholder="Search pets"
         type="search"
         value={searchQuery}
-        onChange={(e) => console.log(e.target.value)}
+        onChange={(e) => handleChangeSearchQuery(e.target.value)}
       />
     </form>
   )
