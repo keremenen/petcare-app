@@ -1,4 +1,4 @@
-import { PetContext } from "@/contexts/pet-conext-provider"
+import { PetContext } from "@/contexts/pet-context-provider"
 import { SearchContext } from "@/contexts/search-context-provider"
 import { useContext } from "react"
 
