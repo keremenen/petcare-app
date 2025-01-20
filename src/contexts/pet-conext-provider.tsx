@@ -4,7 +4,8 @@ import { createContext, useState } from "react"
 
 type TPetContext = {
   pets: Pet[]
-  selectedPetId: Pet | null
+  selectedPetId: string | null
+  handleSetSelectedPetId: (id: string) => void
 }
 
 export const PetContext = createContext<TPetContext | null>(null)
@@ -19,13 +20,18 @@ export default function PetContextProvider({
   children,
 }: PetContextProviderProps) {
   const [pets, setPets] = useState(data)
-  const [selectedPetId, setSelectedPetId] = useState(null)
+  const [selectedPetId, setSelectedPetId] = useState<string | null>(null)
+
+  const handleSetSelectedPetId = (id: string) => {
+    setSelectedPetId(id)
+  }
 
   return (
     <PetContext.Provider
       value={{
         pets,
         selectedPetId,
+        handleSetSelectedPetId,
       }}
     >
       {children}
