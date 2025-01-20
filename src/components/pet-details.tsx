@@ -37,7 +37,6 @@ type Props = {
 }
 
 function TopBar({ pet }: Props) {
-  console.log(pet)
   return (
     <div className="border-light flex items-center border-b bg-white px-8 py-5">
       <Image
