@@ -5,7 +5,7 @@ export default function AccountPage() {
   return (
     <main>
       <H1 className="my-8 text-white">Your account</H1>
-      <ContentBlock className="h-[500px]">
+      <ContentBlock className="flex h-[500px] items-center justify-center">
         <p>Logged in as ...</p>
       </ContentBlock>
     </main>
