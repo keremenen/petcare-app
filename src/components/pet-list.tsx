@@ -12,7 +12,7 @@ export default function PetList() {
   )
 
   return (
-    <ul className="border-light border-b bg-white">
+    <ul className="border-b border-light bg-white">
       {filteredPets.map((pet) => (
         <li key={pet.id}>
           <button
