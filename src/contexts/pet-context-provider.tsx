@@ -38,6 +38,7 @@ export default function PetContextProvider({
   const handleCheckoutPet = (id: string) => {
     const updatedPets = pets.filter((pet) => pet.id !== id)
     setPets(updatedPets)
+    setSelectedPetId(null)
   }
 
   return (
