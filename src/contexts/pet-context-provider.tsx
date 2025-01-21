@@ -33,7 +33,13 @@ export default function PetContextProvider({
 
   // handlers
   const handleAddPet = (newPet: Omit<Pet, "id">) => {
-    setPets([...pets, newPet])
+    setPets((prev) => [
+      ...prev,
+      {
+        ...newPet,
+        id: Date.now().toString(),
+      },
+    ])
   }
 
   const handleSetSelectedPetId = (id: string) => {

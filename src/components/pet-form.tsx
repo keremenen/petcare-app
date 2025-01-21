@@ -19,8 +19,10 @@ export default function PetForm({ actionType }: PetFormProps) {
     const newPet = {
       name: formData.get("name") as string,
       ownerName: formData.get("ownerName") as string,
-      imageUrl: formData.get("imageUrl") as string,
-      age: parseInt(formData.get("age") as string),
+      imageUrl:
+        (formData.get("imageUrl") as string) ||
+        "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
+      age: +parseInt(formData.get("age") as string),
       notes: formData.get("notes") as string,
     }
 
