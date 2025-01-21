@@ -31,6 +31,10 @@ export default function PetContextProvider({
   const numberOfPets = pets.length
 
   // handlers
+  const hadnleAddPet = (newPet: Pet) => {
+    setPets([...pets, newPet])
+  }
+
   const handleSetSelectedPetId = (id: string) => {
     setSelectedPetId(id)
   }
