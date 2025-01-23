@@ -16,6 +16,8 @@ export async function addPet(formData) {
     },
   })
 
+  // simulate a delay 2 second
+  await new Promise((resolve) => setTimeout(resolve, 2000))
   // Revalidate the layout component in the /app route
   revalidatePath("/app", "layout")
 }

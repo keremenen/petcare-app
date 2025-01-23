@@ -6,6 +6,7 @@ import { Label } from "./ui/label"
 import { Textarea } from "./ui/textarea"
 import { addPet } from "@/actions/actions"
 import { on } from "events"
+import PetFormButton from "./pet-form-button"
 
 type PetFormProps = {
   actionType: "add" | "edit"
@@ -78,9 +79,7 @@ export default function PetForm({
           />
         </div>
       </div>
-      <Button type="submit" className="mt-4 self-end">
-        {actionType === "add" ? "Add pet" : "Save changes"}
-      </Button>
+      <PetFormButton actionType={actionType} />
     </form>
   )
 }

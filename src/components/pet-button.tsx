@@ -14,7 +14,7 @@ import PetForm from "./pet-form"
 
 type PetButtonProps = {
   actionType: "add" | "edit" | "checkout"
-  children: React.ReactNode
+  children?: React.ReactNode
   onClick?: () => void
 }
 
