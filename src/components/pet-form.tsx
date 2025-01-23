@@ -33,7 +33,7 @@ export default function PetForm({
     if (actionType === "add") {
       handleAddPet(pet)
     } else if (actionType === "edit") {
-      handleEditPet(selectedPet?.id as string, pet)
+      handleEditPet(selectedPet!.id, pet)
     }
 
     onFormSubbmition()
