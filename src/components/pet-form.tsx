@@ -5,17 +5,27 @@ import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Textarea } from "./ui/textarea"
 import { addPet } from "@/actions/actions"
+import { on } from "events"
 
 type PetFormProps = {
   actionType: "add" | "edit"
   onFormSubbmition: () => void
 }
 
-export default function PetForm({ actionType }: PetFormProps) {
+export default function PetForm({
+  actionType,
+  onFormSubbmition,
+}: PetFormProps) {
   const { selectedPet } = usePetContext()
 
   return (
-    <form className="flex flex-col" action={addPet}>
+    <form
+      className="flex flex-col"
+      action={async (formData) => {
+        await addPet(formData)
+        onFormSubbmition()
+      }}
+    >
       <div className="space-y-3">
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
