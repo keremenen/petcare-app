@@ -1,7 +1,7 @@
 "use client"
 import { addPet } from "@/actions/actions"
 import { Pet } from "@/lib/types"
-import { createContext, useState } from "react"
+import { createContext, useOptimistic, useState } from "react"
 
 type TPetContext = {
   pets: Pet[]
@@ -27,6 +27,7 @@ export default function PetContextProvider({
 }: PetContextProviderProps) {
   // state
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null)
+  const [optimisticPets, setOptimisticPets] = useOptimistic(pets)
 
   // derived state
   const selectedPet = pets.find((pet) => pet.id === selectedPetId)
