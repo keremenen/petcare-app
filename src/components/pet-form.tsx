@@ -4,7 +4,7 @@ import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Textarea } from "./ui/textarea"
-import { addPet } from "@/actions/actions"
+import { addPet, editPet } from "@/actions/actions"
 import { on } from "events"
 import PetFormButton from "./pet-form-button"
 import { toast } from "sonner"
@@ -24,14 +24,25 @@ export default function PetForm({
     <form
       className="flex flex-col"
       action={async (formData) => {
-        const error = await addPet(formData)
+        if (actionType === "add") {
+          const error = await addPet(formData)
 
-        if (error) {
-          toast.error(error.message)
-          return
+          if (error) {
+            toast.error(error.message)
+            return
+          }
+
+          onFormSubbmition()
+        } else if (actionType === "edit") {
+          const error = await editPet(selectedPet!.id, formData)
+
+          if (error) {
+            toast.error(error.message)
+            return
+          }
+
+          onFormSubbmition()
         }
-
-        onFormSubbmition()
       }}
     >
       <div className="space-y-3">

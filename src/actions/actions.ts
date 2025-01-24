@@ -8,7 +8,7 @@ export async function addPet(formData) {
     await prisma.pet.create({
       data: {
         name: formData.get("name"),
-        // ownerName: formData.get("ownerName"),
+        ownerName: formData.get("ownerName"),
         imageUrl:
           formData.get("imageUrl") ||
           "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
@@ -18,6 +18,45 @@ export async function addPet(formData) {
     })
   } catch (error) {
     return { message: "Could not add pet" }
+  }
+
+  // simulate a delay 2 second
+  await new Promise((resolve) => setTimeout(resolve, 2000))
+
+  // Revalidate the layout component in the /app route
+  revalidatePath("/app", "layout")
+}
+
+export async function editPet(petId, formData) {
+  try {
+    await prisma.pet.update({
+      where: { id: petId },
+      data: {
+        name: formData.get("name"),
+        ownerName: formData.get("ownerName"),
+        imageUrl: formData.get("imageUrl"),
+        age: parseInt(formData.get("age")),
+        notes: formData.get("notes"),
+      },
+    })
+  } catch (error) {
+    return { message: "Could not edit pet" }
+  }
+
+  // simulate a delay 2 second
+  await new Promise((resolve) => setTimeout(resolve, 2000))
+
+  // Revalidate the layout component in the /app route
+  revalidatePath("/app", "layout")
+}
+
+export async function checkoutPet(petId) {
+  try {
+    await prisma.pet.delete({
+      where: { id: petId },
+    })
+  } catch (error) {
+    return { message: "Could not delete pet" }
   }
 
   // simulate a delay 2 second
