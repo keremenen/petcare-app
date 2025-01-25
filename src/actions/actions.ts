@@ -1,9 +1,11 @@
 "use server"
 
 import { prisma } from "@/lib/db"
+import { PetEssentials } from "@/lib/types"
+import { Pet } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 
-export async function addPet(pet) {
+export async function addPet(pet: PetEssentials) {
   try {
     await prisma.pet.create({
       data: pet,
@@ -19,7 +21,7 @@ export async function addPet(pet) {
   revalidatePath("/app", "layout")
 }
 
-export async function editPet(petId, newPetData) {
+export async function editPet(petId: Pet["id"], newPetData: PetEssentials) {
   try {
     await prisma.pet.update({
       where: { id: petId },
@@ -30,13 +32,13 @@ export async function editPet(petId, newPetData) {
   }
 
   // simulate a delay 2 second
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+  await new Promise((resolve) => setTimeout(resolve, 1000))
 
   // Revalidate the layout component in the /app route
   revalidatePath("/app", "layout")
 }
 
-export async function checkoutPet(petId) {
+export async function checkoutPet(petId: Pet["id"]) {
   try {
     await prisma.pet.delete({
       where: { id: petId },
@@ -46,7 +48,7 @@ export async function checkoutPet(petId) {
   }
 
   // simulate a delay 2 second
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+  await new Promise((resolve) => setTimeout(resolve, 1000))
 
   // Revalidate the layout component in the /app route
   revalidatePath("/app", "layout")

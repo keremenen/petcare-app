@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/sonner"
 import PetContextProvider from "@/contexts/pet-context-provider"
 import SearchContextProvider from "@/contexts/search-context-provider"
 import { prisma } from "@/lib/db"
-import { Pet } from "@/lib/types"
 
 export default async function AppLayout({
   children,

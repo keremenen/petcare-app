@@ -1,18 +1,19 @@
 "use client"
 import { addPet, checkoutPet, editPet } from "@/actions/actions"
-import { Pet } from "@/lib/types"
+import { PetEssentials } from "@/lib/types"
+import { Pet } from "@prisma/client"
 import { createContext, useOptimistic, useState } from "react"
 import { toast } from "sonner"
 
 type TPetContext = {
   pets: Pet[]
-  selectedPetId: string | null
+  selectedPetId: Pet["id"] | null
   selectedPet: Pet | undefined
   numberOfPets: number
-  handleAddPet: (newPet: Omit<Pet, "id">) => Promise<void>
-  handleEditPet: (petId: string, newPetData: Omit<Pet, "id">) => Promise<void>
-  handleCheckoutPet: (id: string) => Promise<void>
-  handleSetSelectedPetId: (id: string) => void
+  handleAddPet: (newPet: PetEssentials) => Promise<void>
+  handleEditPet: (petId: Pet["id"], newPetData: PetEssentials) => Promise<void>
+  handleCheckoutPet: (id: Pet["id"]) => Promise<void>
+  handleSetSelectedPetId: (id: Pet["id"]) => void
 }
 
 export const PetContext = createContext<TPetContext | null>(null)
@@ -52,7 +53,7 @@ export default function PetContextProvider({
   const numberOfPets = optimisticPets.length
 
   // handlers
-  const handleAddPet = async (newPet: Omit<Pet, "id">) => {
+  const handleAddPet = async (newPet: PetEssentials) => {
     setOptimisticPets({ action: "add", payload: newPet })
     const error = await addPet(newPet)
     if (error) {
@@ -61,7 +62,7 @@ export default function PetContextProvider({
     }
   }
 
-  const handleEditPet = async (petId: string, newPetData: Omit<Pet, "id">) => {
+  const handleEditPet = async (petId: Pet["id"], newPetData: PetEssentials) => {
     setOptimisticPets({ action: "edit", payload: { id: petId, newPetData } })
     const error = await editPet(selectedPet!.id, newPetData)
 
@@ -71,7 +72,7 @@ export default function PetContextProvider({
     }
   }
 
-  const handleCheckoutPet = async (petId: string) => {
+  const handleCheckoutPet = async (petId: Pet["id"]) => {
     setOptimisticPets({ action: "delete", payload: petId })
     const error = await checkoutPet(petId)
 
@@ -81,7 +82,7 @@ export default function PetContextProvider({
     }
   }
 
-  const handleSetSelectedPetId = (id: string) => {
+  const handleSetSelectedPetId = (id: Pet["id"]) => {
     setSelectedPetId(id)
   }
 
