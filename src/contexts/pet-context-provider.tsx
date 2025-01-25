@@ -30,14 +30,20 @@ export default function PetContextProvider({
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null)
   const [optimisticPets, setOptimisticPets] = useOptimistic(
     data,
-    (state, newPet) => {
-      return [
-        ...state,
-        {
-          ...newPet,
-          id: String(Math.random().toString()),
-        },
-      ]
+    (state, { action, payload }) => {
+      // use switch statement to handle different actions
+      switch (action) {
+        case "add":
+          return [...state, { ...payload, id: Math.random().toString() }]
+        case "edit":
+          return state.map((pet) =>
+            pet.id === payload.id ? { ...pet, ...payload.newPetData } : pet,
+          )
+        case "delete":
+          return state.filter((pet) => pet.id !== payload)
+        default:
+          return state
+      }
     },
   )
 
@@ -47,7 +53,7 @@ export default function PetContextProvider({
 
   // handlers
   const handleAddPet = async (newPet: Omit<Pet, "id">) => {
-    setOptimisticPets(newPet)
+    setOptimisticPets({ action: "add", payload: newPet })
     const error = await addPet(newPet)
     if (error) {
       toast.error(error.message)
@@ -56,6 +62,7 @@ export default function PetContextProvider({
   }
 
   const handleEditPet = async (petId: string, newPetData: Omit<Pet, "id">) => {
+    setOptimisticPets({ action: "edit", payload: { id: petId, newPetData } })
     const error = await editPet(selectedPet!.id, newPetData)
 
     if (error) {
@@ -64,13 +71,18 @@ export default function PetContextProvider({
     }
   }
 
-  const handleSetSelectedPetId = (id: string) => {
-    setSelectedPetId(id)
+  const handleCheckoutPet = async (petId: string) => {
+    setOptimisticPets({ action: "delete", payload: petId })
+    const error = await checkoutPet(petId)
+
+    if (error) {
+      toast.error(error.message)
+      setSelectedPetId(null)
+    }
   }
 
-  const handleCheckoutPet = async (petId: string) => {
-    await checkoutPet(petId)
-    setSelectedPetId(null)
+  const handleSetSelectedPetId = (id: string) => {
+    setSelectedPetId(id)
   }
 
   return (

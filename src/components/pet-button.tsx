@@ -21,9 +21,9 @@ type PetButtonProps = {
 }
 
 export default function PetButton({
+  disabled,
   actionType,
   children,
-  disabled,
   onClick,
 }: PetButtonProps) {
   const [isFormOpen, setIsFormOpen] = useState(false)
