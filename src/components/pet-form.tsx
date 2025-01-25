@@ -7,6 +7,7 @@ import { Textarea } from "./ui/textarea"
 import { addPet, editPet } from "@/actions/actions"
 import PetFormButton from "./pet-form-button"
 import { toast } from "sonner"
+import { on } from "events"
 
 type PetFormProps = {
   actionType: "add" | "edit"
@@ -15,13 +16,17 @@ type PetFormProps = {
   onFormSubbmition: () => void
 }
 
-export default function PetForm({ actionType }: PetFormProps) {
+export default function PetForm({
+  actionType,
+  onFormSubbmition,
+}: PetFormProps) {
   const { selectedPet, handleAddPet, handleEditPet } = usePetContext()
 
   return (
     <form
       className="flex flex-col"
       action={async (formData) => {
+        onFormSubbmition()
         const petData = {
           name: formData.get("name") as string,
           ownerName: formData.get("ownerName") as string,
