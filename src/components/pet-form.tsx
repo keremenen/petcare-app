@@ -11,8 +11,6 @@ import { on } from "events"
 
 type PetFormProps = {
   actionType: "add" | "edit"
-  handleAddPet: (newPet: Omit<Pet, "id">) => void
-  handleEditPet: (petId: string, newPetData: Omit<Pet, "id">) => void
   onFormSubbmition: () => void
 }
 
@@ -27,6 +25,7 @@ export default function PetForm({
       className="flex flex-col"
       action={async (formData) => {
         onFormSubbmition()
+
         const petData = {
           name: formData.get("name") as string,
           ownerName: formData.get("ownerName") as string,
@@ -36,6 +35,7 @@ export default function PetForm({
           age: Number(formData.get("age")),
           notes: formData.get("notes") as string,
         }
+
         if (actionType === "add") {
           await handleAddPet(petData)
         } else if (actionType === "edit") {
