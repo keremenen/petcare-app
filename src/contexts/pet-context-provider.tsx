@@ -28,7 +28,12 @@ export default function PetContextProvider({
 }: PetContextProviderProps) {
   // state
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null)
-  const [optimisticPets, setOptimisticPets] = useOptimistic(data)
+  const [optimisticPets, setOptimisticPets] = useOptimistic(
+    data,
+    (state, newPet) => {
+      return [...state, newPet]
+    },
+  )
 
   // derived state
   const selectedPet = optimisticPets.find((pet) => pet.id === selectedPetId)
@@ -36,6 +41,7 @@ export default function PetContextProvider({
 
   // handlers
   const handleAddPet = async (newPet: Omit<Pet, "id">) => {
+    setOptimisticPets(newPet)
     const error = await addPet(newPet)
     if (error) {
       toast.error(error.message)
