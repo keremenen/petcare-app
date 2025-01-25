@@ -11,32 +11,30 @@ import { toast } from "sonner"
 type PetFormProps = {
   actionType: "add" | "edit"
   handleAddPet: (newPet: Omit<Pet, "id">) => void
+  handleEditPet: (petId: string, newPetData: Omit<Pet, "id">) => void
   onFormSubbmition: () => void
 }
 
-export default function PetForm({
-  actionType,
-  handleAddPet,
-  onFormSubbmition,
-}: PetFormProps) {
-  const { selectedPet } = usePetContext()
+export default function PetForm({ actionType }: PetFormProps) {
+  const { selectedPet, handleAddPet, handleEditPet } = usePetContext()
 
   return (
     <form
       className="flex flex-col"
       action={async (formData) => {
+        const petData = {
+          name: formData.get("name") as string,
+          ownerName: formData.get("ownerName") as string,
+          imageUrl:
+            (formData.get("imageUrl") as string) ||
+            "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
+          age: Number(formData.get("age")),
+          notes: formData.get("notes") as string,
+        }
         if (actionType === "add") {
-          handleAddPet(formData)
-          onFormSubbmition()
+          await handleAddPet(petData)
         } else if (actionType === "edit") {
-          const error = await editPet(selectedPet!.id, formData)
-
-          if (error) {
-            toast.error(error.message)
-            return
-          }
-
-          onFormSubbmition()
+          await handleEditPet(selectedPet!.id, petData)
         }
       }}
     >
