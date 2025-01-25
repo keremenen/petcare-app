@@ -22,42 +22,40 @@ type PetContextProviderProps = {
 }
 
 export default function PetContextProvider({
-  data: pets,
+  data,
   children,
 }: PetContextProviderProps) {
   // state
   const [selectedPetId, setSelectedPetId] = useState<string | null>(null)
-  const [optimisticPets, setOptimisticPets] = useOptimistic(pets)
+  const [optimisticPets, setOptimisticPets] = useOptimistic(data)
 
   // derived state
-  const selectedPet = pets.find((pet) => pet.id === selectedPetId)
-  const numberOfPets = pets.length
+  const selectedPet = optimisticPets.find((pet) => pet.id === selectedPetId)
+  const numberOfPets = optimisticPets.length()
 
   // handlers
   const handleAddPet = async (newPet: Omit<Pet, "id">) => {
-    // setPets((prev) => [
-    //   ...prev,
-    //   {
-    //     ...newPet,
-    //     id: Date.now().toString(),
-    //   },
-    // ])
+    const error = await addPet(formData)
+    if (error) {
+      toast.error(error.message)
+      return
+    }
 
     await addPet(newPet)
   }
 
   const handleEditPet = (petId: string, newPetData: Omit<Pet, "id">) => {
-    setPets((prev) =>
-      prev.map((pet) => {
-        if (pet.id === petId) {
-          return {
-            ...newPetData,
-            id: pet.id,
-          }
-        }
-        return pet
-      }),
-    )
+    // setPets((prev) =>
+    //   prev.map((pet) => {
+    //     if (pet.id === petId) {
+    //       return {
+    //         ...newPetData,
+    //         id: pet.id,
+    //       }
+    //     }
+    //     return pet
+    //   }),
+    // )
   }
 
   const handleSetSelectedPetId = (id: string) => {
@@ -65,9 +63,9 @@ export default function PetContextProvider({
   }
 
   const handleCheckoutPet = (id: string) => {
-    const updatedPets = pets.filter((pet) => pet.id !== id)
-    setPets(updatedPets)
-    setSelectedPetId(null)
+    // const updatedPets = pets.filter((pet) => pet.id !== id)
+    // setPets(updatedPets)
+    // setSelectedPetId(null)
   }
 
   return (
