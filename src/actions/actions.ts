@@ -6,7 +6,7 @@ import { petFormSchema } from "@/lib/validations"
 import { Pet } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 
-export async function addPet(pet: PetEssentials) {
+export async function addPet(pet: unknown) {
   const validatedPet = petFormSchema.safeParse(pet)
   if (!validatedPet.success) {
     return { message: "Invalid pet data" }
