@@ -1,3 +1,6 @@
+import { z } from "zod"
+import { DEFAULT_PET_IMAGE } from "./constants"
+
 export const petFormSchema = z
   .object({
     name: z
