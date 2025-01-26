@@ -4,10 +4,19 @@ import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Textarea } from "./ui/textarea"
 import PetFormButton from "./pet-form-button"
+import { useForm } from "react-hook-form"
 
 type PetFormProps = {
   actionType: "add" | "edit"
   onFormSubbmition: () => void
+}
+
+type TPerForm = {
+  name: string
+  ownerName: string
+  imageUrl: string
+  age: number
+  notes: string
 }
 
 export default function PetForm({
@@ -15,6 +24,10 @@ export default function PetForm({
   onFormSubbmition,
 }: PetFormProps) {
   const { selectedPet, handleAddPet, handleEditPet } = usePetContext()
+  const {
+    register,
+    formState: { isSubmitting, errors },
+  } = useForm<TPerForm>()
 
   return (
     <form
@@ -44,51 +57,49 @@ export default function PetForm({
           <Label htmlFor="name">Name</Label>
           <Input
             id="name"
-            name="name"
-            type="text"
-            required
-            defaultValue={actionType === "edit" ? selectedPet?.name : ""}
+            {...register("name", { required: "Name is required" })}
           />
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         </div>
 
         <div>
           <Label htmlFor="ownerName">Owner name</Label>
           <Input
             id="ownerName"
-            name="ownerName"
-            type="text"
-            required
+            {...register("ownerName", { required: "Owner name is required" })}
             defaultValue={actionType === "edit" ? selectedPet?.ownerName : ""}
           />
+          {errors.ownerName && (
+            <p className="text-red-500">{errors.ownerName.message}</p>
+          )}
         </div>
         <div>
           <Label htmlFor="imageUrl">Image URL</Label>
           <Input
             id="imageUrl"
-            name="imageUrl"
-            type="text"
-            defaultValue={actionType === "edit" ? selectedPet?.imageUrl : ""}
+            {...register("imageUrl", { required: "Image URL is required" })}
           />
+          {errors.imageUrl && (
+            <p className="text-red-500">{errors.imageUrl.message}</p>
+          )}
         </div>
         <div>
           <Label htmlFor="age">Age</Label>
           <Input
             id="age"
-            name="age"
-            type="number"
-            required
-            defaultValue={actionType === "edit" ? selectedPet?.age : ""}
+            {...register("age", { required: "Age is required" })}
           />
+          {errors.age && <p className="text-red-500">{errors.age.message}</p>}
         </div>
         <div>
           <Label htmlFor="notes">Notes</Label>
           <Textarea
             id="notes"
-            name="notes"
-            rows={4}
-            required
-            defaultValue={actionType === "edit" ? selectedPet?.notes : ""}
+            {...register("notes", { required: "Notes is required" })}
           />
+          {errors.notes && (
+            <p className="text-red-500">{errors.notes.message}</p>
+          )}
         </div>
       </div>
       <PetFormButton actionType={actionType} />
