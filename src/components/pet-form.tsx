@@ -8,37 +8,12 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DEFAULT_PET_IMAGE } from "@/lib/constants"
+import { petFormSchema, TPerForm } from "@/lib/validations"
 
 type PetFormProps = {
   actionType: "add" | "edit"
   onFormSubbmition: () => void
 }
-
-const petFormSchema = z
-  .object({
-    name: z
-      .string()
-      .trim()
-      .min(3, {
-        message: "Name should be at least 3 characterss",
-      })
-      .max(20, {
-        message: "Name should be at most 20 characters",
-      }),
-    ownerName: z.string().trim().max(20),
-    imageUrl: z.union([
-      z.literal(""),
-      z.string().trim().url({ message: "Invalid URL" }),
-    ]),
-    age: z.coerce.number().int().positive().max(20),
-    notes: z.union([z.literal(""), z.string().trim().max(1000)]),
-  })
-  .transform((data) => ({
-    ...data,
-    imageUrl: data.imageUrl || DEFAULT_PET_IMAGE,
-  }))
-
-type TPerForm = z.infer<typeof petFormSchema>
 
 export default function PetForm({
   actionType,
@@ -52,6 +27,13 @@ export default function PetForm({
     formState: { isSubmitting, errors },
   } = useForm<TPerForm>({
     resolver: zodResolver(petFormSchema),
+    defaultValues: {
+      name: actionType === "edit" ? selectedPet?.name : "",
+      ownerName: actionType === "edit" ? selectedPet?.ownerName : "",
+      imageUrl: actionType === "edit" ? selectedPet?.imageUrl : "",
+      age: actionType === "edit" ? selectedPet?.age : undefined,
+      notes: actionType === "edit" ? selectedPet?.notes : "",
+    },
   })
 
   return (
