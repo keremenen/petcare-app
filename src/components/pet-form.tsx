@@ -7,38 +7,38 @@ import PetFormButton from "./pet-form-button"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { DEFAULT_PET_IMAGE } from "@/lib/constants"
 
 type PetFormProps = {
   actionType: "add" | "edit"
   onFormSubbmition: () => void
 }
 
-type TPerForm = {
-  name: string
-  ownerName: string
-  imageUrl: string
-  age: number
-  notes: string
-}
+const petFormSchema = z
+  .object({
+    name: z
+      .string()
+      .trim()
+      .min(3, {
+        message: "Name should be at least 3 characterss",
+      })
+      .max(20, {
+        message: "Name should be at most 20 characters",
+      }),
+    ownerName: z.string().trim().max(20),
+    imageUrl: z.union([
+      z.literal(""),
+      z.string().trim().url({ message: "Invalid URL" }),
+    ]),
+    age: z.coerce.number().int().positive().max(20),
+    notes: z.union([z.literal(""), z.string().trim().max(1000)]),
+  })
+  .transform((data) => ({
+    ...data,
+    imageUrl: data.imageUrl || DEFAULT_PET_IMAGE,
+  }))
 
-const petFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(3, {
-      message: "Name should be at least 3 characterss",
-    })
-    .max(20, {
-      message: "Name should be at most 20 characters",
-    }),
-  ownerName: z.string().trim().max(20),
-  imageUrl: z.union([
-    z.literal(""),
-    z.string().trim().url({ message: "Invalid URL" }),
-  ]),
-  age: z.coerce.number().int().positive().max(20),
-  notes: z.union([z.literal(""), z.string().trim().max(1000)]),
-})
+type TPerForm = z.infer<typeof petFormSchema>
 
 export default function PetForm({
   actionType,
@@ -47,6 +47,7 @@ export default function PetForm({
   const { selectedPet, handleAddPet, handleEditPet } = usePetContext()
   const {
     register,
+    getValues,
     trigger,
     formState: { isSubmitting, errors },
   } = useForm<TPerForm>({
@@ -56,21 +57,14 @@ export default function PetForm({
   return (
     <form
       className="flex flex-col"
-      action={async (formData) => {
+      action={async () => {
         const result = await trigger()
         if (!result) return
 
         onFormSubbmition()
 
-        const petData = {
-          name: formData.get("name") as string,
-          ownerName: formData.get("ownerName") as string,
-          imageUrl:
-            (formData.get("imageUrl") as string) ||
-            "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-          age: Number(formData.get("age")),
-          notes: formData.get("notes") as string,
-        }
+        const petData = getValues()
+        petData.imageUrl = petData.imageUrl || DEFAULT_PET_IMAGE
 
         if (actionType === "add") {
           await handleAddPet(petData)
