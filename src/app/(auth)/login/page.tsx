@@ -7,9 +7,9 @@ export default function LoginPage() {
     <main>
       <H1 className="mb-5 text-center">Log in</H1>
 
-      <AuthForm />
+      <AuthForm type="logIn" />
       <p className="mt-6 text-sm text-zinc-500">
-        Don't have an account? <Link href="/signup">Signup</Link>
+        Don't have an account? <Link href="/signup">Sign up</Link>
       </p>
     </main>
   )
