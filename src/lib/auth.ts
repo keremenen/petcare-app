@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import bcryptjs from "bcryptjs"
+import bcrypt from "bcryptjs"
 import { prisma } from "./db"
 
 const config = {
