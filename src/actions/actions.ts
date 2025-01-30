@@ -1,17 +1,23 @@
 "use server"
 
-import { signIn } from "@/lib/auth"
+import { signIn, signOut } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { PetEssentials } from "@/lib/types"
 import { petFormSchema, petIdSchema } from "@/lib/validations"
 import { Pet } from "@prisma/client"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/dist/server/api-utils"
+
+// AUTH ACTIONS
+
+export async function logOut() {
+  await signOut({ redirectTo: "/" })
+}
 
 // USER ACTIONS
 
 export async function logIn(formData: FormData) {
   const authData = Object.fromEntries(formData.entries())
-
   await signIn("credentials", authData)
 }
 
