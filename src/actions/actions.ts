@@ -8,6 +8,7 @@ import { Pet } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 import bcrypt from "bcryptjs"
 import { redirect } from "next/navigation"
+import { checkAuth } from "@/lib/server-utils"
 
 // AUTH ACTIONS
 
@@ -41,10 +42,7 @@ export async function signUp(formData: FormData) {
 // PET ACTIONS
 
 export async function addPet(pet: unknown) {
-  const session = await auth()
-  if (!session) {
-    redirect("/login")
-  }
+  const session = await checkAuth()
 
   const validatedPet = petFormSchema.safeParse(pet)
   if (!validatedPet.success) {
@@ -74,10 +72,7 @@ export async function addPet(pet: unknown) {
 }
 
 export async function editPet(petId: unknown, newPetData: unknown) {
-  const session = await auth()
-  if (!session?.user) {
-    redirect("/login")
-  }
+  const session = await checkAuth()
 
   const validatedPet = petFormSchema.safeParse(newPetData)
   const validatedPetId = petIdSchema.safeParse(petId)
@@ -115,10 +110,7 @@ export async function editPet(petId: unknown, newPetData: unknown) {
 }
 
 export async function checkoutPet(petId: unknown) {
-  const session = await auth()
-  if (!session?.user) {
-    redirect("/login")
-  }
+  const session = await checkAuth()
 
   const validatedPetId = petIdSchema.safeParse(petId)
   if (!validatedPetId.success) {

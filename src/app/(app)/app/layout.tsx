@@ -7,17 +7,15 @@ import SearchContextProvider from "@/contexts/search-context-provider"
 import { prisma } from "@/lib/db"
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
+import { checkAuth } from "@/lib/server-utils"
 
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const session = await auth()
+  const session = await checkAuth()
 
-  if (!session) {
-    redirect("/login")
-  }
   const data = await prisma.pet.findMany({
     where: {
       userId: session.user?.id,
