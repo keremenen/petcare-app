@@ -1,13 +1,10 @@
 "use server"
 
-import { auth, signIn, signOut } from "@/lib/auth"
+import { signIn, signOut } from "@/lib/auth"
 import { prisma } from "@/lib/db"
-import { PetEssentials } from "@/lib/types"
 import { petFormSchema, petIdSchema } from "@/lib/validations"
-import { Pet } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 import bcrypt from "bcryptjs"
-import { redirect } from "next/navigation"
 import { checkAuth, getPetByPetId } from "@/lib/server-utils"
 
 // AUTH ACTIONS
