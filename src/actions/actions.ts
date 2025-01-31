@@ -98,9 +98,27 @@ export async function editPet(petId: unknown, newPetData: unknown) {
 }
 
 export async function checkoutPet(petId: unknown) {
+  const session = await auth()
+  if (!session?.user) {
+    redirect("/login")
+  }
+
   const validatedPetId = petIdSchema.safeParse(petId)
   if (!validatedPetId.success) {
     return { message: "Invalid pet data" }
+  }
+
+  // authorization check
+  const pet = await prisma.pet.findUnique({
+    where: { id: validatedPetId.data },
+  })
+
+  if (!pet) {
+    return { message: "Pet not found" }
+  }
+
+  if (pet.userId !== session.user.id) {
+    return { message: "Unauthorized" }
   }
 
   try {
