@@ -33,3 +33,5 @@ export const authSchema = z.object({
   email: z.string().email().max(100),
   password: z.string().max(100),
 })
+
+export type TAuthForm = z.infer<typeof authSchema>

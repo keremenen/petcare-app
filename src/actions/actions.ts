@@ -16,21 +16,11 @@ export async function logOut() {
 // USER ACTIONS
 
 export async function logIn(formData: unknown) {
-  let formDataObject
-
   if (!(formData instanceof FormData)) {
-    return {
-      message: "Invalid form data",
-    }
-  }
-  formDataObject = Object.fromEntries(formData.entries())
-
-  const validatedFormData = authSchema.safeParse(formDataObject)
-  if (!validatedFormData.success) {
     return { message: "Invalid credentials" }
   }
 
-  await signIn("credentials", validatedFormData)
+  await signIn("credentials", formData)
 }
 
 export async function signUp(formData: FormData) {

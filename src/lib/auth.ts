@@ -2,6 +2,7 @@ import NextAuth, { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import { prisma } from "./db"
+import { authSchema } from "./validations"
 
 const config = {
   pages: {
@@ -15,7 +16,13 @@ const config = {
     Credentials({
       async authorize(credentials) {
         // runs when a user tries to sign in
-        const { email, password } = credentials
+
+        const validatedFormData = authSchema.safeParse(credentials)
+        if (!validatedFormData.success) {
+          return null
+        }
+
+        const { email, password } = validatedFormData.data
 
         const user = await prisma.user.findUnique({
           where: {
