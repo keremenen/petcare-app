@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache"
 import bcrypt from "bcryptjs"
 import { checkAuth, getPetByPetId } from "@/lib/server-utils"
 import { Prisma } from "@prisma/client"
+import { redirect } from "next/navigation"
+import { AuthError } from "next-auth"
 
 // AUTH ACTIONS
 
@@ -16,12 +18,27 @@ export async function logOut() {
 
 // USER ACTIONS
 
-export async function logIn(formData: unknown) {
+export async function logIn(prevState: unknown, formData: unknown) {
   if (!(formData instanceof FormData)) {
     return { message: "Invalid credentials" }
   }
+  try {
+    await signIn("credentials", formData)
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { message: "Invalid credentials" }
 
-  await signIn("credentials", formData)
+        default:
+          return { message: "Sign in error" }
+      }
+    }
+    return {
+      message: "Sign in error",
+    }
+  }
+  redirect("/app/dashboard")
 }
 
 export async function signUp(prevState: unknown, formData: unknown) {

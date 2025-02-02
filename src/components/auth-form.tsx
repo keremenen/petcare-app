@@ -3,17 +3,20 @@ import { Label } from "./ui/label"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { logIn, signUp } from "@/actions/actions"
-import { useFormState, useFormStatus } from "react-dom"
+
 import AuthFormBtn from "./auth-form-btn"
+import { useActionState } from "react"
 
 type AuthFormProps = {
   type: "signUp" | "logIn"
 }
 
 export default function AuthForm({ type }: AuthFormProps) {
-  const [signUpError, dispatchSignUp] = useFormState(signUp, undefined)
+  const [signUpError, dispatchSignUp] = useActionState(signUp, undefined)
+  const [logInError, dispatchLogIn] = useActionState(logIn, undefined)
+
   return (
-    <form action={type === "logIn" ? logIn : dispatchSignUp}>
+    <form action={type === "logIn" ? dispatchLogIn : dispatchSignUp}>
       <div className="space-y-1">
         <Label htmlFor="email">Email</Label>
         <Input id="email" name="email" type="email" required />
@@ -26,6 +29,9 @@ export default function AuthForm({ type }: AuthFormProps) {
       <AuthFormBtn type={type} />
       {signUpError && (
         <p className="text-sm text-red-500">{signUpError.message}</p>
+      )}
+      {logInError && (
+        <p className="text-sm text-red-500">{logInError.message}</p>
       )}
     </form>
   )
