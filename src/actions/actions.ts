@@ -13,6 +13,9 @@ import { AuthError } from "next-auth"
 // AUTH ACTIONS
 
 export async function logOut() {
+  //sleep for 2 seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000))
+
   await signOut({ redirectTo: "/" })
 }
 
