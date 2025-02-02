@@ -6,6 +6,7 @@ import { authSchema, petFormSchema, petIdSchema } from "@/lib/validations"
 import { revalidatePath } from "next/cache"
 import bcrypt from "bcryptjs"
 import { checkAuth, getPetByPetId } from "@/lib/server-utils"
+import { Prisma } from "@prisma/client"
 
 // AUTH ACTIONS
 
@@ -24,6 +25,9 @@ export async function logIn(formData: unknown) {
 }
 
 export async function signUp(formData: unknown) {
+  //sleep for 2 seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000))
+
   if (!(formData instanceof FormData)) {
     return { message: "Invalid credentials" }
   }
@@ -40,12 +44,20 @@ export async function signUp(formData: unknown) {
 
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  await prisma.user.create({
-    data: {
-      email,
-      hashedPassword,
-    },
-  })
+  try {
+    await prisma.user.create({
+      data: {
+        email,
+        hashedPassword,
+      },
+    })
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return { message: "Email already exists" }
+      }
+    }
+  }
 
   await signIn("credentials", formData)
 }

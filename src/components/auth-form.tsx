@@ -3,6 +3,8 @@ import { Label } from "./ui/label"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { logIn, signUp } from "@/actions/actions"
+import { useFormStatus } from "react-dom"
+import AuthFormBtn from "./auth-form-btn"
 
 type AuthFormProps = {
   type: "signUp" | "logIn"
@@ -20,7 +22,7 @@ export default function AuthForm({ type }: AuthFormProps) {
         <Input id="password" name="password" type="password" required />
       </div>
 
-      <Button>{type === "signUp" ? "Sign up" : "Log in"}</Button>
+      <AuthFormBtn type={type} />
     </form>
   )
 }
