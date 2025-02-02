@@ -24,7 +24,7 @@ export async function logIn(formData: unknown) {
   await signIn("credentials", formData)
 }
 
-export async function signUp(formData: unknown) {
+export async function signUp(prevState: unknown, formData: unknown) {
   //sleep for 2 seconds
   await new Promise((resolve) => setTimeout(resolve, 2000))
 
