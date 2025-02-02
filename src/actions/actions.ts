@@ -34,9 +34,7 @@ export async function logIn(prevState: unknown, formData: unknown) {
           return { message: "Sign in error" }
       }
     }
-    return {
-      message: "Sign in error",
-    }
+    throw error // rethrow the error if it's not an AuthError
   }
   redirect("/app/dashboard")
 }
