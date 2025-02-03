@@ -4,7 +4,9 @@ import H1 from "@/components/h1"
 import { use, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 
-export default function PaymentPage(props: { searchParams }) {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+export default function PaymentPage(props: { searchParams: SearchParams }) {
   const searchParams = use(props.searchParams)
   const [isPending, startTransition] = useTransition()
 
