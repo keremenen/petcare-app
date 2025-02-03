@@ -10,6 +10,8 @@ import { Prisma } from "@prisma/client"
 import { redirect } from "next/navigation"
 import { AuthError } from "next-auth"
 
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
+
 // AUTH ACTIONS
 
 export async function logOut() {
@@ -180,4 +182,24 @@ export async function checkoutPet(petId: unknown) {
 
   // Revalidate the layout component in the /app route
   revalidatePath("/app", "layout")
+}
+
+export async function createCheckoutSesstion() {
+  //authorization check
+  const session = await checkAuth()
+
+  const checkoutSession = await stripe.checkout.sessions.create({
+    email: session.user.email,
+    line_ietms: [
+      {
+        price: "prod_Rht5ighsJs0koa",
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${process.env.CANONICAL_URL}/payment?success=true`,
+    cancel_url: `${process.env.CANONICAL_URL}/payment?canceled=true`,
+  })
+
+  redirect(checkoutSession.url)
 }
