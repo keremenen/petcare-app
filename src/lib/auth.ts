@@ -2,7 +2,6 @@ import NextAuth, { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import { prisma } from "./db"
-import { authSchema } from "./validations"
 
 const config = {
   pages: {
@@ -16,13 +15,7 @@ const config = {
     Credentials({
       async authorize(credentials) {
         // runs when a user tries to sign in
-
-        const validatedFormData = authSchema.safeParse(credentials)
-        if (!validatedFormData.success) {
-          return null
-        }
-
-        const { email, password } = validatedFormData.data
+        const { email, password } = credentials
 
         const user = await prisma.user.findUnique({
           where: {
@@ -61,7 +54,13 @@ const config = {
         return true
       }
       if (isLoggedIn && !isTryingToAccessApp) {
-        return Response.redirect(new URL("/app/dashboard", request.nextUrl))
+        if (
+          request.nextUrl.pathname.includes("/login") ||
+          request.nextUrl.pathname.includes("/signup")
+        ) {
+          return Response.redirect(new URL("/payment", request.nextUrl))
+        }
+        return true
       }
       if (!isTryingToAccessApp && !isTryingToAccessApp) {
         return true
@@ -85,9 +84,4 @@ const config = {
   },
 } satisfies NextAuthConfig
 
-export const {
-  auth,
-  signIn,
-  signOut,
-  handlers: { GET, POST },
-} = NextAuth(config)
+export const { auth, signIn, signOut } = NextAuth(config)
