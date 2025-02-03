@@ -1,20 +1,23 @@
 "use client"
 import { createCheckoutSesstion } from "@/actions/actions"
 import H1 from "@/components/h1"
-import { use } from "react"
+import { use, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 
 export default function PaymentPage(props: { searchParams }) {
   const searchParams = use(props.searchParams)
-  console.log(searchParams)
+  const [isPending, startTransition] = useTransition()
 
   return (
     <main className="flex flex-col items-center gap-y-10">
       <H1>PetSoft access requires payment</H1>
       {!searchParams.success && (
         <Button
+          disabled={isPending}
           onClick={async () => {
-            await createCheckoutSesstion()
+            startTransition(async () => {
+              await createCheckoutSesstion()
+            })
           }}
         >
           Buy lifetime access for 299$
