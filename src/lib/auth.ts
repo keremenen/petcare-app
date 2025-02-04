@@ -2,6 +2,7 @@ import NextAuth, { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import { prisma } from "./db"
+import { getUserByEmail } from "@/actions/actions"
 
 const config = {
   pages: {
@@ -76,10 +77,22 @@ const config = {
 
       return false
     },
-    jwt: ({ token, user }) => {
+    jwt: async ({ token, user, trigger }) => {
       if (user) {
         token.userId = user.id as string
+        token.email = user.email!
         token.hasAccess = user.hasAccess
+      }
+      if (trigger === "update") {
+        const userFromDB = await prisma.user.findUnique({
+          where: {
+            email: token.email,
+          },
+        })
+        console.log(`get user: ${userFromDB}`)
+        if (userFromDB) {
+          token.hasAccess = userFromDB.hasAccess
+        }
       }
 
       return token
@@ -95,4 +108,9 @@ const config = {
   },
 } satisfies NextAuthConfig
 
-export const { auth, signIn, signOut } = NextAuth(config)
+export const {
+  auth,
+  signIn,
+  signOut,
+  handlers: { GET, POST },
+} = NextAuth(config)

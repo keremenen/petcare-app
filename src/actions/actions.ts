@@ -186,7 +186,6 @@ export async function checkoutPet(petId: unknown) {
 
 export async function createCheckoutSesstion() {
   //authorization check
-  console.log("entry")
   const session = await checkAuth()
 
   const checkoutSession = await stripe.checkout.sessions.create({
@@ -203,4 +202,10 @@ export async function createCheckoutSesstion() {
   })
 
   redirect(checkoutSession.url)
+}
+
+export async function getUserByEmail(email: string) {
+  return prisma.user.findUnique({
+    where: { email },
+  })
 }
