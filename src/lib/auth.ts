@@ -46,26 +46,36 @@ const config = {
       // runs on every request with middleware
       const isLoggedIn = Boolean(auth?.user)
       const isTryingToAccessApp = request.nextUrl.pathname.includes("/app")
+      const hasAccess = auth?.user?.hasAccess
 
       if (!isLoggedIn && isTryingToAccessApp) {
         return false
       }
 
-      if (isLoggedIn && isTryingToAccessApp && !auth?.user?.hasAccess) {
+      if (isLoggedIn && isTryingToAccessApp && !hasAccess) {
         return Response.redirect(new URL("/payment", request.nextUrl))
       }
 
-      if (isLoggedIn && isTryingToAccessApp && auth?.user?.hasAccess) {
+      if (isLoggedIn && isTryingToAccessApp && hasAccess) {
         return true
       }
 
-      if (isLoggedIn && !isTryingToAccessApp) {
+      if (isLoggedIn && !isTryingToAccessApp && !hasAccess) {
         if (
-          (request.nextUrl.pathname.includes("/login") ||
-            request.nextUrl.pathname.includes("/signup")) &&
-          !auth?.user?.hasAccess
+          request.nextUrl.pathname.includes("/login") ||
+          request.nextUrl.pathname.includes("/signup")
         ) {
           return Response.redirect(new URL("/payment", request.nextUrl))
+        }
+        return true
+      }
+
+      if (isLoggedIn && !isTryingToAccessApp && hasAccess) {
+        if (
+          request.nextUrl.pathname.includes("/login") ||
+          request.nextUrl.pathname.includes("/signup")
+        ) {
+          return Response.redirect(new URL("/app/dashboar", request.nextUrl))
         }
         return true
       }
