@@ -11,7 +11,7 @@ type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 export default function PaymentPage(props: { searchParams: SearchParams }) {
   const searchParams = use(props.searchParams)
   const [isPending, startTransition] = useTransition()
-  const { update } = useSession()
+  const { data: session, update, status } = useSession()
   const router = useRouter()
 
   return (
@@ -24,6 +24,7 @@ export default function PaymentPage(props: { searchParams: SearchParams }) {
             await update(true)
             router.push("/app/dashboard")
           }}
+          disabled={status === "loading" || session?.user.hasAccess}
         >
           Access PetSoft
         </Button>

@@ -2,7 +2,6 @@ import NextAuth, { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import { prisma } from "./db"
-import { getUserByEmail } from "@/actions/actions"
 
 const config = {
   pages: {
