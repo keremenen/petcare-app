@@ -15,9 +15,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 // AUTH ACTIONS
 
 export async function logOut() {
-  //sleep for 2 seconds
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-
   await signOut({ redirectTo: "/" })
 }
 
@@ -45,9 +42,6 @@ export async function logIn(prevState: unknown, formData: unknown) {
 }
 
 export async function signUp(prevState: unknown, formData: unknown) {
-  //sleep for 2 seconds
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-
   if (!(formData instanceof FormData)) {
     return { message: "Invalid credentials" }
   }
@@ -107,9 +101,6 @@ export async function addPet(pet: unknown) {
     return { message: "Could not add pet" }
   }
 
-  // simulate a delay 2 second
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-
   // Revalidate the layout component in the /app route
   revalidatePath("/app", "layout")
 }
@@ -143,9 +134,6 @@ export async function editPet(petId: unknown, newPetData: unknown) {
     return { message: "Could not edit pet" }
   }
 
-  // simulate a delay 2 second
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
   // Revalidate the layout component in the /app route
   revalidatePath("/app", "layout")
 }
@@ -176,9 +164,6 @@ export async function checkoutPet(petId: unknown) {
   } catch (error) {
     return { message: "Could not delete pet" }
   }
-
-  // simulate a delay 2 second
-  await new Promise((resolve) => setTimeout(resolve, 1000))
 
   // Revalidate the layout component in the /app route
   revalidatePath("/app", "layout")
